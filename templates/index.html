@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fake URL Detector</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>Fake URL Detector</h1>
+
+            <p class="subtitle">
+                Check whether a URL looks suspicious
+            </p>
+        </div>
+
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="url"
+                placeholder="Enter a URL..."
+                required
+            >
+
+            <button type="submit">
+                Check URL
+            </button>
+
+        </form>
+
+
+        {% if result %}
+
+        <div class="result
+            {% if result.result == 'Looks Safe' %}
+                safe
+            {% elif result.result == 'Suspicious' %}
+                suspicious
+            {% else %}
+                malicious
+            {% endif %}
+        ">
+
+            <div class="result-header">
+
+                <h2>{{ result.result }}</h2>
+
+                <p class="score">
+                    Risk Score: <strong>{{ result.score }}/10</strong>
+                </p>
+
+            </div>
+
+
+            <div class="score-bar">
+
+                <div
+                    class="score-fill"
+                    style="width: {{ result.score * 10 }}%;"
+                ></div>
+
+            </div>
+
+
+            {% if result.reasons %}
+
+            <div class="reasons">
+
+                <h3>Why is this URL suspicious?</h3>
+
+                <ul>
+
+                    {% for reason in result.reasons %}
+
+                    <li>
+                        <span>⚠️</span>
+                        {{ reason }}
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% else %}
+
+            <div class="reasons">
+
+                <h3>Analysis</h3>
+
+                <p class="safe-message">
+                    ✅ No major suspicious patterns detected.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="how-it-works">
+
+            <h3>How it works</h3>
+
+            <p>
+                The detector checks common URL patterns that may indicate
+                a suspicious website.
+            </p>
+
+            <div class="checks">
+
+                <div>
+                    <strong>HTTPS</strong>
+                    <span>Checks whether the URL uses secure HTTPS.</span>
+                </div>
+
+                <div>
+                    <strong>IP Address</strong>
+                    <span>Checks if an IP is used instead of a domain.</span>
+                </div>
+
+                <div>
+                    <strong>@ Symbol</strong>
+                    <span>Detects symbols that can hide the destination.</span>
+                </div>
+
+                <div>
+                    <strong>Keywords</strong>
+                    <span>Looks for suspicious words such as login or verify.</span>
+                </div>
+
+                <div>
+                    <strong>Shorteners</strong>
+                    <span>Detects common URL shortening services.</span>
+                </div>
+
+                <div>
+                    <strong>URL Structure</strong>
+                    <span>Checks unusually long URLs and excessive subdomains.</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <p class="disclaimer">
+            This tool uses simple rule-based checks and cannot guarantee
+            that a website is safe.
+        </p>
+
+    </div>
+
+</body>
+
+</html>
